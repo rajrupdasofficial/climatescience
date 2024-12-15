@@ -32,4 +32,4 @@ Some of example output
 
 wap vs time series
 
-<img src="https://github.com/rajrupdasofficial/climatescience/blob/master/output/vertical_velocity_plot.png" alt="datasetimage1" height="600" width="500">
+<img src="https://github.com/rajrupdasofficial/climatescience/blob/master/output/vertical_velocity_plot.png" alt="datasetimage1" height="600" width="900">
