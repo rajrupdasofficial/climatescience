@@ -7,7 +7,7 @@ import xarray as xr
 # # Print dataset information
 # print(dataset)
 
-ds = xr.open_dataset('./dataset/nasa-data3.nc')
+ds = xr.open_dataset('./dataset/nasa_data1.nc')
 
 # Inspect the dataset
 print(ds)

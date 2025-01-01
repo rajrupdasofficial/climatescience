@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 import netCDF4 as nc
 from netCDF4 import num2date
 import numpy as np
-import os
+import datetime
+import matplotlib.dates as mdates
 
 # Select a specific latitude and longitude index
 lat_index = 32
@@ -30,21 +31,50 @@ time_dates = num2date(time_data, units=time_units)
 # Convert cftime objects to numpy datetime64 for compatibility with matplotlib
 time_dates_np = np.array(time_dates).astype('datetime64[s]')
 
+# Define date range for 2024-2026
+start_date = datetime.datetime(2024, 1, 1)
+end_date = datetime.datetime(2026, 12, 31)
+
+# Convert datetime to matplotlib date numbers
+start_num = mdates.date2num(start_date)
+end_num = mdates.date2num(end_date)
+
+# Create mask for specified date range
+mask_range = (mdates.date2num(time_dates_np) >= start_num) & (mdates.date2num(time_dates_np) <= end_num)
+
+# Extract vertical velocity data for the range
+wap_range = wap_time_series[mask_range]
+time_range = time_dates_np[mask_range]
+
+# Calculate statistics
+mean_wap = np.mean(wap_range)
+min_wap = np.min(wap_range)
+max_wap = np.max(wap_range)
+std_wap = np.std(wap_range)
+
+# Print statistics
+print("Vertical Velocity (WAP) Statistics (2024-2026):")
+print(f"Mean Vertical Velocity: {mean_wap:.4f}")
+print(f"Minimum Vertical Velocity: {min_wap:.4f}")
+print(f"Maximum Vertical Velocity: {max_wap:.4f}")
+print(f"Standard Deviation: {std_wap:.4f}")
+
 # Plotting the data
-plt.figure(figsize=(10, 5))
-plt.plot(time_dates_np, wap_time_series)
-plt.title('Vertical Velocity (wap) Over Time at Specific Location')
+plt.figure(figsize=(20, 10))
+plt.plot(time_range, wap_range, label='Vertical Velocity')
+plt.title('Vertical Velocity (WAP) from 2024 to 2026')
 plt.xlabel('Time')
-plt.ylabel('Vertical Velocity (wap)')
-plt.grid()
+plt.ylabel('Vertical Velocity')
+plt.grid(True)
 
-# Save the figure to a specific folder
-output_folder = './output'  # Specify your output folder here
-os.makedirs(output_folder, exist_ok=True)  # Create folder if it doesn't exist
+# Format x-axis
+plt.gcf().autofmt_xdate()
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
 
-# Save the figure as a PNG file (you can change the format by changing the extension)
-output_file_path = os.path.join(output_folder, 'vertical_velocity_plot.png')
-plt.savefig(output_file_path, bbox_inches='tight')  # Save with tight layout
+# Add horizontal line for mean
+plt.axhline(y=mean_wap, color='r', linestyle='--',
+            label=f'Mean Vertical Velocity: {mean_wap:.4f}')
 
-# Optionally show the plot (if desired)
+plt.legend()
+plt.tight_layout()
 plt.show()
