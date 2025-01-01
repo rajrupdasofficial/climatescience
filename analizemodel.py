@@ -1,15 +1,15 @@
 import matplotlib
-matplotlib.use('Qt5Agg')  # Use an interactive backend
+matplotlib.use('Qt5Agg')
 
 import matplotlib.pyplot as plt
 import netCDF4 as nc
 from netCDF4 import num2date
 import numpy as np
-import os  # Import os for path handling
+import os
 
 # Select a specific latitude and longitude index
-lat_index = 32  # Example index for latitude
-lon_index = 64  # Example index for longitude
+lat_index = 32
+lon_index = 64
 
 # Load the dataset
 dataset = nc.Dataset('./dataset/nasa_data1.nc')
